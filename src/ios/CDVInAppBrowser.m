@@ -436,6 +436,15 @@
 
 - (void)webView:(UIWebView*)theWebView didFailLoadWithError:(NSError*)error
 {
+     //Workaround for Genentech SSO MFA
+     NSString *ssoCheck = [self.inAppBrowserViewController.currentURL absoluteString];
+    
+    if ([ssoCheck rangeOfString:@"sso"].location == NSNotFound) {
+        NSLog(@"string does not contain sso");
+    } else {
+        return;
+    }
+
     if (self.callbackId != nil) {
         NSString* url = [self.inAppBrowserViewController.currentURL absoluteString];
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
